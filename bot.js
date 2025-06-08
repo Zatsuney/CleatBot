@@ -100,11 +100,13 @@ client.on(Events.InteractionCreate, async interaction => {
             await interaction.reply({ content: 'Ajouté à la file d\'attente.', ephemeral: true });
         }
         if (interaction.commandName === 'search') {
+            await interaction.deferReply({ ephemeral: true }); // Réserve l'interaction
+
             const query = interaction.options.getString('query');
             const results = await ytSearch(query);
 
             if (!results.videos.length) {
-                return interaction.reply({ content: 'Aucun résultat trouvé.', ephemeral: true });
+                return interaction.editReply({ content: 'Aucun résultat trouvé.' });
             }
 
             const videos = results.videos.slice(0, 10);
@@ -129,10 +131,9 @@ client.on(Events.InteractionCreate, async interaction => {
             // Stocke les résultats pour ce serveur
             searchResultsMap.set(interaction.guildId, videos);
 
-            await interaction.reply({
+            await interaction.editReply({
                 content: 'Résultats de recherche :',
-                components: rows,
-                ephemeral: true
+                components: rows
             });
         }
         if (interaction.commandName === 'leave') {
