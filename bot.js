@@ -1,4 +1,10 @@
 require('dotenv').config();
+if (process.env.RENDER) {
+    require('http').createServer((req, res) => {
+        res.end('Bot Discord actif');
+    }).listen(process.env.PORT || 3000);
+}
+
 const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Events } = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const ytdl = require('@distube/ytdl-core');
